@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="/style/style.css">
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <h1 class="header_logo"> Погода для твоего города</h1>
+            <form action="get" >
+                <input type="text" name="city" id="city" class="city" placeholder="Введите название города...">
+                <button type="submit" class="place">Поиск</button>
+            </form>
+        </header>
+        <main class="main">
+            <section >
+                <ul class="variantInterval">
+                    <li><button class="weatherToday">Сегодня</button></li>
+                    <li><button class="weathertomorrow">Завтра</button></li>
+                    <li><button class="weatherThree">На три дня</button></li>
+                    <li><button class="weatherWeek">на 5 дней</button></li>
+                                </ul>
+                <div class="weatherInfo"></div>
+            </section>
+        </main>
+        <footer>
+            <p>Створенно для некормеційного використання та партфолио</p>
+        </footer>
+
+    </div>
+
+
+        <script src="/script/script.js"></script>
+</body>
+</html>

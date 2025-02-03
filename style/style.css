@@ -1,0 +1,184 @@
+:root {
+    --header-fs: 28px;
+    --primary-color: #411fdc;
+    --primary-hover: #1906a8;
+    --gradient-bg: linear-gradient(90deg, #85cfe3, #dbeff5);
+    --card-bg: #ffffff;
+    --button-bg: #411fdc;
+    --button-hover: #1906a8;
+    --text-color: #333;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+}
+
+/* Контейнер */
+.container {
+    margin: 0 auto;
+    max-width: 1440px;
+    padding: 20px;
+    background: var(--gradient-bg);
+    min-height: 100vh;
+}
+
+/* Шапка */
+.header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1.5rem 2rem;
+    background: rgba(255, 255, 255, 0.9);
+    border-radius: 15px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    margin-bottom: 2rem;
+}
+
+.header_logo {
+    font-size: var(--header-fs);
+    font-weight: 700;
+    color: var(--primary-color);
+}
+
+/* Форми для отримання міста */
+.city {
+    border-radius: 12px;
+    padding: 0.5rem;
+    border: 2px solid var(--primary-color);
+    background: #fff;
+    color: var(--primary-color);
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.city:hover {
+    background: var(--primary-color);
+    color: white;
+}
+
+/* Кнопка */
+.place {
+    background-color: var(--button-bg);
+    color: white;
+    padding: 0.6rem 1rem;
+    border-radius: 12px;
+    font-size: 1rem;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s;
+}
+
+.place:hover {
+    background-color: var(--button-hover);
+    transform: scale(1.05);
+}
+
+/* Блок інформації про погоду */
+.weatherInfo {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem;
+}
+
+/* Картки прогнозу */
+.cardWeather {
+    background: var(--card-bg);
+    border-radius: 12px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    padding: 1.5rem;
+    text-align: center;
+    transition: all 0.3s ease;
+    width: 250px;
+}
+
+.cardWeather:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+}
+
+/* Коллекція карток */
+.cardCollection {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 2rem;
+}
+
+/* Назва коллекції */
+.collectionName {
+    text-align: center;
+    font-size: 2rem;
+    font-weight: 600;
+    color: var(--text-color);
+    margin-bottom: 2rem;
+}
+
+/* Вибір часового інтервалу */
+.variantInterval {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+    list-style-type: none;
+}
+
+.variantInterval button {
+    border-radius: 12px;
+    padding: 12px 18px;
+    font-size: 1rem;
+    font-weight: 600;
+    letter-spacing: 1px;
+    border: 2px solid var(--primary-color);
+    background: white;
+    color: var(--primary-color);
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.variantInterval button:hover {
+    background-color: var(--primary-color);
+    color: white;
+    transform: scale(1.05);
+}
+
+/* Підвал */
+footer {
+    height: 150px;
+    background: rgba(255, 255, 255, 0.9);
+    margin-top: 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--text-color);
+    font-weight: 500;
+    border-radius: 15px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Адаптивнісь сайту для різного відображення */
+@media (max-width: 768px) {
+    .header {
+        flex-direction: column;
+        gap: 1rem;
+        padding: 1rem;
+    }
+
+    .variantInterval {
+        flex-wrap: wrap;
+    }
+
+    .weatherInfo {
+        flex-direction: column;
+    }
+
+    .cardWeather {
+        width: 100%;
+    }
+}
