@@ -1,19 +1,22 @@
-gdocument.addEventListener('DOMContentLoaded', () => {
-    const getWeather = async function (city) {
-        const key = "738f083ad01db14bdb81194bc7d940ae";
+document.addEventListener('DOMContentLoaded', () => {
+    const getWeather = async (city) => {
+        const apiKey = "738f083ad01db14bdb81194bc7d940ae";
+        if (!city) {
+            alert("Введіть назву вашого міста!");
+            return;
+        }
         
-
         const cachedData = localStorage.getItem(city);
         if (cachedData) {
-            console.log('Використання кешу');
+            console.log('Використовуеться кеш');
             return JSON.parse(cachedData);
         }
         
         try {
-            const response = await fetch(`https://api.openweathermap.org/data/2.5/forecast?q=${city}&lang=uk&units=metric&appid=${key}&_=${Date.now()}`);
+            const response = await fetch(`https://api.openweathermap.org/data/2.5/forecast?q=${city}&lang=uk&units=metric&appid=${apiKey}`);
             
             if (!response.ok) {
-                throw new Error('Переіврь свое місто');
+                throw new Error('Перевірте назву вашного міста');
             }
             
             const data = await response.json();
@@ -21,140 +24,76 @@ gdocument.addEventListener('DOMContentLoaded', () => {
             return data;
         } catch (error) {
             console.error("Помилка", error.message);
+            alert(error.message);
         }
     };
-
-    const render = function (mass) {
+    
+    const render = (dataList) => {
+        if (!dataList || dataList.length === 0) {
+            alert("Немає данних про погоду");
+            return;
+        }
+        
         const weatherInfo = document.querySelector('.weatherInfo');
+        weatherInfo.innerHTML = "";
         const cardCollection = document.createElement('div');
         cardCollection.classList.add('cardCollection');
         
-        mass.forEach(element => {
+        dataList.forEach(item => {
             const weatherElem = document.createElement('div');
-            weatherElem.classList.add('card');
-            const temp = element.main.temp;
-            const date = new Date(element.dt_txt);
-            const winde = element.wind.speed;
-            const icon = element.weather[0].icon;
-            const iconUrl = `https://openweathermap.org/img/wn/${icon}.png`;
-            const options = { 
-                weekday: 'long',
-                hour: '2-digit',
-                minute: '2-digit'
-            };
-            let formattedDate = date.toLocaleDateString('uk-UA', options);
-            formattedDate = formattedDate.charAt(0).toUpperCase() + formattedDate.slice(1);
-            const description = element.weather[0].description;
-    
-            const feels = element.main.feels_like;
-            
             weatherElem.classList.add('cardWeather');
+            
+            const temp = item.main.temp;
+            const feels = item.main.feels_like;
+            const windSpeed = item.wind.speed;
+            const icon = item.weather[0].icon;
+            const description = item.weather[0].description;
+            
+            const date = new Date(item.dt_txt);
+            const formattedDate = date.toLocaleString('uk-UA', {
+                weekday: 'long', hour: '2-digit', minute: '2-digit'
+            }).replace(/^./, match => match.toUpperCase());
+            
             weatherElem.innerHTML = `
-                <p> ${formattedDate}</p>
-                <img src="${iconUrl}" title="${description}" />
-                <p>Температура : ${temp}°C</p>
-                <p>Відчувается як: ${feels}°C</p>
-                <p>Повітря: ${winde} м/с</p>
+                <p>${formattedDate}</p>
+                <img src="https://openweathermap.org/img/wn/${icon}.png" title="${description}" />
+                <p>Температура: ${temp}°C</p>
+                <p>Відчуваеться  як: ${feels}°C</p>
+                <p>Повітря: ${windSpeed} м/с</p>
             `;
             cardCollection.appendChild(weatherElem);
         });
-
+        
         weatherInfo.appendChild(cardCollection);
     };
 
-    const todayWeather = function (data) {
-        const date = new Date().toISOString().split('T')[0];
-        const today = data.list.filter(item => item.dt_txt.startsWith(date));
-        render(today);
+    const filterWeather = (data, daysAhead) => {
+        const targetDate = new Date();
+        targetDate.setDate(targetDate.getDate() + daysAhead);
+        const dateStr = targetDate.toISOString().split('T')[0];
+        return data.list.filter(item => item.dt_txt.startsWith(dateStr));
     };
 
-    const weatherTommoriw = function (data) {
-        const todayDate = new Date();
-        todayDate.setDate(todayDate.getDate() + 1);
-        const date = todayDate.toISOString().split('T')[0];
-        const tomorrow = data.list.filter(item => item.dt_txt.startsWith(date));
-        render(tomorrow);
+    const setupButton = (selector, daysAhead, title) => {
+        document.querySelector(selector).addEventListener('click', async (event) => {
+            event.preventDefault();
+            const city = document.querySelector('.city').value.trim();
+            const data = await getWeather(city);
+            if (!data) return;
+            
+            const weatherInfo = document.querySelector('.weatherInfo');
+            weatherInfo.innerHTML = `<div class='collectionName'>${title}</div>`;
+            render(filterWeather(data, daysAhead));
+        });
     };
-
-    const threeDay = function (data) {
-        const todayDate = new Date();
-        todayDate.setDate(todayDate.getDate() + 2);
-        const date = todayDate.toISOString().split("T")[0];
-        const threeDaysWeather = data.list.filter(item => item.dt_txt.startsWith(date));
-        render(threeDaysWeather);
-    };
-
-    const middle = function (data) {
-        const middleWeather = data.list.filter(item => 
-            item.dt_txt.endsWith("09:00:00") || 
-            item.dt_txt.endsWith("15:00:00") || 
-            item.dt_txt.endsWith("21:00:00")
-        );
-        render(middleWeather);
-    };
-
-    document.querySelector('.place').addEventListener('click', async (event) => {
-        event.preventDefault();
-        const city = document.querySelector('.city').value;
-        const data = await getWeather(city);
-        const weatherInfo = document.querySelector('.weatherInfo');
-        weatherInfo.innerHTML = "";
-        const title = document.createElement('div');
-        title.classList.add('collectionName');
-        title.textContent = 'Погода для вашего міста';
-        weatherInfo.appendChild(title);
-        render(data.list);
-    });
-
-    document.querySelector('.weatherToday').addEventListener('click', async (event) => {
-        event.preventDefault();
-        const city = document.querySelector('.city').value;
-        const data = await getWeather(city);
-        const weatherInfo = document.querySelector('.weatherInfo');
-        weatherInfo.innerHTML = "";
-        const title = document.createElement('div');
-        title.classList.add('collectionName');
-        title.textContent = 'Погода на сьогодні';
-        weatherInfo.appendChild(title);
-        todayWeather(data);
-    });
-
-    document.querySelector('.weathertomorrow').addEventListener('click', async (event) => {
-        event.preventDefault();
-        const city = document.querySelector('.city').value;
-        const data = await getWeather(city);
-        const weatherInfo = document.querySelector('.weatherInfo');
-        weatherInfo.innerHTML = "";
-        const title = document.createElement('div');
-        title.classList.add('collectionName');
-        title.textContent = 'Погода на завтра';
-        weatherInfo.appendChild(title);
-        weatherTommoriw(data);
-    });
-
-    document.querySelector('.weatherThree').addEventListener('click', async (event) => {
-        event.preventDefault();
-        const city = document.querySelector('.city').value;
-        const data = await getWeather(city);
-        const weatherInfo = document.querySelector('.weatherInfo');
-        weatherInfo.innerHTML = "";
-        const title = document.createElement('div');
-        title.classList.add('collectionName');
-        title.textContent = 'Погода на 3 дні';
-        weatherInfo.appendChild(title);
-        threeDay(data);
-    });
-
-    document.querySelector('.weatherWeek').addEventListener('click', async (event) => {
-        event.preventDefault();
-        const city = document.querySelector('.city').value;
-        const data = await getWeather(city);
-        const weatherInfo = document.querySelector('.weatherInfo');
-        weatherInfo.innerHTML = "";
-        const title = document.createElement('div');
-        title.classList.add('collectionName');
-        title.textContent = 'Погода на пять днів';
-        weatherInfo.appendChild(title);
-        middle(data);
-    });
+    
+    setupButton('.place', 0, 'Погода для вашого міста');
+    setupButton('.weatherToday', 0, 'Погода на сьогодні');
+    setupButton('.weathertomorrow', 1, 'Погода на завтра');
+    setupButton('.weatherThree', 2, 'Погода на 3 дні');
+    setupButton('.weatherWeek', 5, 'Погода на 5 днів');
 });
+
+if (typeof module !== 'undefined' && module.exports) {
+    module.exports = { getWeather, render, filterWeather, setupButton };
+}
