@@ -1,30 +1,30 @@
 # Weather Report
 
-A simple weather report web application that allows users to view current weather conditions for any city. The app retrieves data from a weather API and displays key weather details like temperature, humidity, wind speed, and more.
+Просте веб-застосування для перегляду поточних погодних умов у будь-якому місті. Застосунок отримує дані з погодного API та відображає основні погодні показники, такі як температура, вологість, швидкість вітру та інші.
 
-## Features
-- Search for weather by city name.
-- View current temperature, humidity, wind speed, and weather description.
-- Display weather data dynamically using an external API.
-- Responsive design for mobile and desktop views.
+## Особливості
+- Пошук погоди за назвою міста.
+- Перегляд поточної температури, вологості, швидкості вітру та опису погоди.
+- Динамічне відображення даних про погоду за допомогою зовнішнього API.
+- Адаптивний дизайн для мобільних та десктопних версій.
 
-## Tech Stack
-- **Frontend:** HTML, CSS, JavaScript
-- **Backend (optional):** Node.js, Express (if you have server-side functionality)
-- **Weather API:** OpenWeatherMap (or another weather API)
-- **Version Control:** Git, GitHub
+## Технології
+- **Фронтенд:** HTML, CSS, JavaScript.
+- **Бекенд (необов'язково):** Node.js, Express (якщо використовується серверна частина).
+- **Погодне API:** OpenWeatherMap (або інше погодне API).
+- **Контроль версій:** Git, GitHub.
 
-## Setup & Installation
+## Налаштування та встановлення
 
-### Prerequisites
+### Першочергові вимоги
 
-Before you begin, ensure you have the following installed:
-- [Node.js](https://nodejs.org/) (if using backend)
-- [npm](https://www.npmjs.com/) (Node.js package manager)
+Перед початком переконайтеся, що у вас встановлено:
+- [Node.js](https://nodejs.org/) (якщо використовується бекенд).
+- [npm](https://www.npmjs.com/) (менеджер пакетів Node.js).
 
-### Clone the repository
+### Клонування репозиторію
 
-Clone this repository to your local machine:
+Клонуйте цей репозиторій на свій локальний комп'ютер:
 
 ```bash
 git clone https://github.com/Septors/weather-report.git
